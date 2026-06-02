@@ -1,0 +1,66 @@
+{
+  "name": "Sending Test Email",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        -32
+      ],
+      "id": "a30362af-4a58-4ce9-91e0-9e8ab70383d7",
+      "name": "My manual trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "satwiksaiv@gmail.com",
+        "subject": "my first project on automation",
+        "emailType": "text",
+        "message": "hey,Hi from n8n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        -32
+      ],
+      "id": "657cd0cd-f999-44e2-ac06-7daf1e5da438",
+      "name": "Send a Test Email",
+      "webhookId": "4519a3f3-7adb-4343-a1ec-73a87441e5b2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MCmt8CNKvKvPqWie",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "My manual trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a Test Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f46a4bf6-672a-47db-98db-7a4904f1cd67",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5252e33be5367dba6598c01578a5f438c71ce3b4ac5c88b79f8ffd42aaea1492"
+  },
+  "id": "BOPPuAhMN2Sbc9JJ",
+  "tags": []
+}

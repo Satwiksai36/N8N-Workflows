@@ -1,0 +1,145 @@
+{
+  "name": "Agentic Workflow of Chat Model",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -448,
+        16
+      ],
+      "id": "7a685b76-890c-4130-9525-406e17c370c0",
+      "name": "When chat message received",
+      "webhookId": "fe1d32ff-cdbf-4c2b-96bc-b2d2fa5af506"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant\n\nwhen ask about tasks ,make sure that use the google tasks tool"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -224,
+        16
+      ],
+      "id": "7f69411f-58dd-4a90-9edc-2a1a9aa71a04",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        224
+      ],
+      "id": "e9f333e8-46f5-49a8-b1d8-a7515461f9d7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "09pExKJIXPJ8hSKD",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -160,
+        240
+      ],
+      "id": "a4a3588e-5398-4d02-a9ff-312d053c33e9",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "MDUyNzg2Mjk4MjMyMjA0NTY5MDM6MDow",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        16,
+        208
+      ],
+      "id": "c727665c-aa26-4092-831e-cb29f32c95e1",
+      "name": "Google Tasks Tool",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "7AB1LMzTHE2kPrL8",
+          "name": "Google Tasks OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Tasks Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fa58947a-5184-4547-9982-5dcb358068b6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5252e33be5367dba6598c01578a5f438c71ce3b4ac5c88b79f8ffd42aaea1492"
+  },
+  "id": "ejpDZOONxm02syXR",
+  "tags": []
+}
