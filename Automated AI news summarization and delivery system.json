@@ -1,0 +1,274 @@
+{
+  "name": "Automated AI news summarization and delivery system.",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        -96
+      ],
+      "id": "3022aeb7-114f-4446-b337-883272a05895",
+      "name": "Workflow trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Provide a summary of world and tech news from the last 24 hours. \n\n- Use the headings \"World News\" and \"Tech News.\" \n- Exclude comments, insights, and any news that is considered sad or distressing. \n- Include up to 10 concise bullet points, prioritizing major events and developments. \n- Focus on key developments from credible sources.\n- Consider today to be {{ $today }}. \n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -144,
+        -96
+      ],
+      "id": "25012f3a-6868-4943-8b99-b870d3e9b551",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        128
+      ],
+      "id": "71acced8-c890-4ff2-aa64-689c6cfd27d3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "CwBRPBUvgob1BAks",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $execution.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -80,
+        128
+      ],
+      "id": "ccfbc53b-cb99-4047-a590-67e143458282",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Reads the news",
+        "url": "=https://feeds.bbci.co.uk/news/world/rss.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedReadTool",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        128
+      ],
+      "id": "f1e08ab1-6631-4118-84de-cdd57b9de927",
+      "name": "Get World News"
+    },
+    {
+      "parameters": {
+        "url": "https://www.theverge.com/rss/index.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedReadTool",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        128
+      ],
+      "id": "2c37d4b7-00b8-4309-bb14-a7b829235a9a",
+      "name": "Get Tech News"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "85b5c530-2c13-4424-ab83-05979bc879a5",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -96
+      ],
+      "id": "5be887d5-5a5d-43f7-be6c-344f5ba7bbd2",
+      "name": "Output (News summary)",
+      "notesInFlow": true,
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "sendTo": "satwiksai36@gmail.com",
+        "subject": "Your news daily summary",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        -96
+      ],
+      "id": "cccd33f9-acc9-4266-a4cc-eebb28cffa34",
+      "name": "Send summary with Gmail",
+      "webhookId": "e0c46fef-51f3-4a8d-8aaf-b6e17ea89346",
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "BrosoqGgBBPo7pxY",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "notes": "Double-click to open"
+    },
+    {
+      "parameters": {
+        "content": "✅ This demo workflow is ready to use\n✨ We gave you free OpenAI credits to play with",
+        "height": 256,
+        "width": 400,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -192
+      ],
+      "id": "2155845e-269f-4f91-9e3c-0f2950d9b8b9",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### ✨ Bonus step \nSend the news summary via email. Open the node and connect your Gmail account [(= new credential)](https://www.youtube.com/shorts/2K6ltfI4YRg)",
+        "height": 112,
+        "width": 384,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -192
+      ],
+      "id": "249466ee-b000-4044-9318-b7f387df33c4",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Workflow trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get World News": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Tech News": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Output (News summary)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output (News summary)": {
+      "main": [
+        [
+          {
+            "node": "Send summary with Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "573c9531-14a6-468b-a147-9a72a22fce27",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5252e33be5367dba6598c01578a5f438c71ce3b4ac5c88b79f8ffd42aaea1492"
+  },
+  "id": "RZcVL5QzholE7aTH",
+  "tags": []
+}
